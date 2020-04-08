@@ -5,18 +5,16 @@ const { autoUpdater } = require('electron-updater');
 
 function createWindow () {
   win = new BrowserWindow({
-    width: 1000,
-    height: 800,
+    width: 350,
+    height: 500,
     frame: false,
     icon: "APPLICATION/IMAGES/icon.ico",
-    minWidth: 1000,
-    minHeight: 800,
     webPreferences: {
       nodeIntegration: true
     }
   })
 
-  win.loadFile('APPLICATION/HTML/index.html')
+  win.loadFile('APPLICATION/HTML/load.html')
 
   //win.webContents.openDevTools()
 
@@ -24,9 +22,7 @@ function createWindow () {
     win = null
   })
 
-  win.once('ready-to-show', () => {
     autoUpdater.checkForUpdatesAndNotify();
-  });
 }
 
 
@@ -45,13 +41,31 @@ app.on('activate', () => {
   }
 })
 
+autoUpdater.on('checking-for-update', () => {
+  win.webContents.send('checking_for_update');
+});
+
 autoUpdater.on('update-available', () => {
   win.webContents.send('update_available');
+});
+
+autoUpdater.on('update-not-available', () => {
+  win.webContents.send('update_not_available');
 });
 
 autoUpdater.on('update-downloaded', () => {
   win.webContents.send('update_downloaded');
 });
+
+
+
+autoUpdater.on('download-progress', (progressObj) => {
+  let log_message = ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+  win.webContents.send('download_progress', log_message);
+})
+
+
 
 ipcMain.on('app_version', (event) => {
   event.sender.send('app_version', { version: app.getVersion() });

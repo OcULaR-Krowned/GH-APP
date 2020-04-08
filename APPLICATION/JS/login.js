@@ -25,3 +25,12 @@ function exitWindow () {
     var window = remote.BrowserWindow.getFocusedWindow();
     window.close();
 }
+
+function fullscreen(){
+    var window = remote.getCurrentWindow();
+    window.focus();
+    window.setResizable(true);
+    window.setSize(1100, 750);
+    window.setMinimumSize(1100, 750);
+    window.maximize();
+}
