@@ -33,7 +33,7 @@
     "url" : "https://github.com/OcULaR-Krowned/GH-APP.git"
   },
   "devDependencies": {
-    "electron": "^7.1.1",
+    "electron": "^9.4.0",
     "electron-builder": "^22.4.1"
   },
   "scripts": {
